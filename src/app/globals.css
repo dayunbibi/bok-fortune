@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+/* colors and fonts from the design handoff (HANDOFF.md) */
+@theme {
+  --color-red: #d8402f;
+  --color-red-deep: #a82a22;
+  --color-red-title: #c8352a;
+  --color-gold: #f2c14e;
+  --color-gold-star: #e3a51a;
+  --color-gold-text: #d9a21b;
+  --color-cream: #fbf4e6;
+  --color-paper: #fff8e8;
+  --color-tile: #fbefd6;
+  --color-field: #fffdf7;
+  --color-sun: #f7e4ae;
+  --color-ink: #2b2320;
+  --color-ink-soft: #4a3f36;
+  --color-muted: #6b5d4f;
+  --color-faint: #8a7a66;
+  --color-star-off: #e2d3b6;
+  --color-dash: #d9c8a8;
+  --color-on-red: #fff6e2;
+
+  --font-jua: "Jua", sans-serif;
+  --font-batang: "Gowun Batang", serif;
+  --font-dodum: "Gowun Dodum", sans-serif;
+
+  --animate-shake: shake 0.45s ease-in-out infinite;
+  --animate-pop: pop 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
+  --animate-rise: rise 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  --animate-wiggle: wiggle 0.6s ease-in-out infinite;
+  --animate-blink: blink 0.9s steps(1) infinite;
+
+  @keyframes shake {
+    0%, 100% { transform: rotate(-10deg) }
+    25% { transform: rotate(-2deg) translateY(-6px) }
+    50% { transform: rotate(-16deg) }
+    75% { transform: rotate(-6deg) translateY(-4px) }
+  }
+  @keyframes pop {
+    0% { transform: translate(-40px, 180px) rotate(-20deg) scale(0.3); opacity: 0 }
+    100% { transform: rotate(14deg); opacity: 1 }
+  }
+  @keyframes rise {
+    0% { transform: translateY(24px); opacity: 0 }
+    100% { transform: none; opacity: 1 }
+  }
+  @keyframes wiggle {
+    0%, 100% { opacity: 1 }
+    50% { opacity: 0.35 }
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1 }
+    50% { opacity: 0 }
+  }
+}
+
+/* one warm cream look on purpose (설날), so no dark mode */
+:root {
+  color-scheme: light;
+}
+
+@layer base {
+  html {
+    background: var(--color-cream) url(/art/background.svg) repeat;
+  }
+  body {
+    margin: 0;
+    color: var(--color-ink);
+    font-family: var(--font-dodum);
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+  input::placeholder {
+    color: #b5a68e;
+  }
+  button {
+    cursor: pointer;
+  }
+}
+
+/* the 색동 stripe used on top of every screen */
+.saekdong {
+  background: linear-gradient(#d8402f 0 20%, #f2c14e 20% 40%, #6fa85a 40% 60%, #4c7db8 60% 80%, #ee8fa6 80%);
+}
+
+/* chunky sticker button that sinks when pressed */
+.btn {
+  border: 2.5px solid var(--color-ink);
+  box-shadow: 0 5px 0 var(--color-ink);
+  font-family: var(--font-jua);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--color-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

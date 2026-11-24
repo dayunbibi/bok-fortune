@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 340" width="300" height="340" xmlns:c2pa="http://c2pa.org/manifest">
+<defs>
+<filter id="w" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="3.5"></feDisplacementMap></filter>
+<clipPath id="b"><path d="M84 140 Q30 200 44 262 Q64 318 150 320 Q236 318 256 262 Q270 200 216 140 Z"></path></clipPath>
+</defs>
+<g filter="url(#w)" stroke="#2B2320" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+<path d="M88 142 Q70 92 96 62 Q122 80 150 60 Q178 80 204 62 Q230 92 212 142 Z" fill="#D8402F"></path>
+<path d="M120 80 L128 134 M150 68 L150 134 M180 80 L172 134" fill="none" stroke-width="4" opacity=".45"></path>
+<path d="M84 140 Q30 200 44 262 Q64 318 150 320 Q236 318 256 262 Q270 200 216 140 Z" fill="#D8402F"></path>
+<g clip-path="url(#b)" stroke="none">
+<rect x="0" y="262" width="300" height="8" fill="#F2C14E"></rect><rect x="0" y="270" width="300" height="8" fill="#6FA85A"></rect><rect x="0" y="278" width="300" height="8" fill="#4C7DB8"></rect><rect x="0" y="286" width="300" height="8" fill="#EE8FA6"></rect><rect x="0" y="294" width="300" height="8" fill="#FFF6E2"></rect>
+</g>
+<path d="M84 140 Q30 200 44 262 Q64 318 150 320 Q236 318 256 262 Q270 200 216 140 Z" fill="none"></path>
+<path d="M72 196 Q64 226 74 252" fill="none" stroke="#FFF6E2" stroke-width="7" opacity=".6"></path>
+<path d="M82 140 Q150 160 218 140" fill="none" stroke-width="22"></path>
+<path d="M82 140 Q150 160 218 140" fill="none" stroke="#F2C14E" stroke-width="11"></path>
+<circle cx="150" cy="210" r="36" fill="#F2C14E"></circle>
+<circle cx="150" cy="210" r="27" fill="none" stroke-width="3.5"></circle>
+<text x="150" y="222" text-anchor="middle" font-family="'Noto Serif KR','Gowun Batang',serif" font-weight="700" font-size="34" fill="#A82A22" stroke="none">福</text>
+<path d="M214 144 Q264 150 262 208" fill="none" stroke-width="12"></path>
+<path d="M214 144 Q264 150 262 208" fill="none" stroke="#F2C14E" stroke-width="5"></path>
+<circle cx="262" cy="212" r="11" fill="#F2C14E"></circle>
+<path d="M248 224 L276 224 L282 276 L242 276 Z" fill="#F2C14E"></path>
+<path d="M254 236 L252 268 M262 236 L262 268 M270 236 L272 268" fill="none" stroke-width="3" opacity=".55"></path>
+</g>
+</svg>
