@@ -173,14 +173,14 @@ function StartScreen({
 
       <div className="relative mt-1.5 aspect-[390/330] w-full">
         <div className="absolute aspect-square rounded-full bg-sun" style={{ left: px(60), top: px(24, 330), width: px(270) }} />
-        <img src="/art/poip-hanbok.svg" alt="한복 입은 포잎이" className="absolute" style={{ left: px(54), top: px(10, 330), width: px(240) }} />
+        <img src="/art/poip-hanbok.webp" alt="한복 입은 포잎이" className="absolute" style={{ left: px(84), top: px(4, 330), width: px(216) }} />
         <img
           src="/art/bokjumeoni-closed.svg"
           alt="복주머니"
           className="absolute rotate-[8deg]"
           style={{ right: px(18), bottom: px(4, 330), width: px(128) }}
         />
-        <img src="/art/baby-lamb.svg" alt="아기 양" className="absolute bottom-0" style={{ left: px(6), width: px(112) }} />
+        <img src="/art/baby-lamb.webp" alt="아기 양" className="absolute bottom-0" style={{ left: px(-2), width: px(104) }} />
       </div>
 
       <form
@@ -278,8 +278,8 @@ function DrawingScreen({ name }: { name: string }) {
           </div>
         ))}
 
-        <img src="/art/poip-hanbok.svg" alt="포잎이" className="absolute -rotate-[8deg]" style={{ left: px(-6), bottom: px(66, H), width: px(150) }} />
-        <img src="/art/baby-lamb.svg" alt="아기 양" className="absolute" style={{ right: px(6), bottom: px(70, H), width: px(112) }} />
+        <img src="/art/poip-hanbok.webp" alt="포잎이" className="absolute -rotate-[8deg]" style={{ left: px(-6), bottom: px(66, H), width: px(150) }} />
+        <img src="/art/baby-lamb.webp" alt="아기 양" className="absolute" style={{ right: px(6), bottom: px(70, H), width: px(112) }} />
         <div className="absolute animate-blink font-jua text-[34px] text-red-title" style={{ right: px(40), bottom: px(178, H) }}>
           !
         </div>
@@ -366,7 +366,7 @@ function ResultScreen({ f, onSave, onSend, onOther }: { f: Fortune; onSave: () =
           </div>
         </div>
         <Roller className="-mt-1" />
-        <img src="/art/poip-hanbok.svg" alt="" className="absolute -top-[74px] -right-3.5 w-[84px] rotate-[10deg]" />
+        <img src="/art/poip-hanbok.webp" alt="" className="absolute -top-[74px] -right-3.5 w-[84px] rotate-[10deg]" />
       </div>
 
       <div className="flex flex-col gap-2.5 px-[22px] pt-[22px]">

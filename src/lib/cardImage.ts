@@ -77,7 +77,7 @@ export async function makeCardImage(f: Fortune): Promise<Blob> {
     document.fonts.load(`700 50px ${BATANG}`, f.total.join("") + f.stamp),
     document.fonts.load(`27px ${DODUM}`, allText + "★"),
   ]).catch(() => {});
-  const [cat, lamb] = await Promise.all([loadImage("/art/poip-hanbok.svg"), loadImage("/art/baby-lamb.svg")]);
+  const [cat, lamb] = await Promise.all([loadImage("/art/poip-hanbok.webp"), loadImage("/art/baby-lamb.webp")]);
 
   const canvas = document.createElement("canvas");
   canvas.width = W;
@@ -189,11 +189,13 @@ export async function makeCardImage(f: Fortune): Promise<Blob> {
   c.font = `36px ${JUA}`;
   c.fillStyle = "#FFF6E2";
   c.fillText("나도 복주머니 흔들러 가기 →", 64, H - 60);
-  c.drawImage(lamb, W - 250 - 150, H - 24 - 141, 150, 141);
+  const lambH = (150 * lamb.height) / lamb.width;
+  c.drawImage(lamb, W - 250 - 150, H - 24 - lambH, 150, lambH);
   c.save();
   c.translate(W - 30 - 120, H + 30 - 144);
   c.rotate((-6 * Math.PI) / 180);
-  c.drawImage(cat, -120, -144, 240, 288);
+  const catH = (240 * cat.height) / cat.width;
+  c.drawImage(cat, -120, 144 - catH, 240, catH);
   c.restore();
 
   return new Promise((resolve, reject) => canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("toBlob failed"))), "image/png"));
