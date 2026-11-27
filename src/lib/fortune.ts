@@ -8,6 +8,12 @@ export type Fortune = {
   date: string; // YYYY-MM-DD (local)
   stamp: string; // 大吉 / 吉 / 中吉 / 小吉
   total: [string, string];
+  grade: string;
+  golden: boolean;
+  keyword: string;
+  item: string;
+  caution: string;
+  cheer: string;
   areas: Area[];
   food: string;
   color: { name: string; hex: string };
@@ -72,6 +78,35 @@ const AREAS: { key: string; label: string; lines: Record<3 | 4 | 5, string[]> }[
   },
 ];
 
+// Each theme has its own voice, advice and encouragement.
+const THEMES = [
+  ["느긋함", "남과 비교하기", "네 속도로 가는 것도 멋진 일이야!"],
+  ["성장", "완벽주의", "작은 시작이 큰 꽃을 피울 거야!"],
+  ["기쁨", "눈치 보기", "좋아하는 걸 마음껏 즐겨!"],
+  ["도전", "미루기", "포잎이가 네 첫걸음을 응원해!"],
+  ["인연", "혼자 끙끙대기", "보고 싶은 사람에게 먼저 연락해 봐!"],
+  ["휴식", "무리한 계획", "쉬어도 괜찮아. 복은 도망가지 않아!"],
+  ["새 출발", "낯선 것 피하기", "새로운 길에 작은 행운이 기다려!"],
+  ["결실", "성급한 포기", "그동안 잘해왔어. 조금만 더 가보자!"],
+  ["다정함", "괜한 오해", "너의 다정함이 복으로 돌아올 거야!"],
+  ["용기", "걱정 쌓아두기", "생각보다 네가 훨씬 강하단다!"],
+  ["자기 사랑", "스스로 탓하기", "오늘도 네 편이 되어줄게!"],
+  ["건강한 일상", "끼니 거르기", "따뜻한 밥 먹고 힘내자!"],
+  ["기회", "충동적인 결정", "반짝이는 순간을 놓치지 마!"],
+  ["꾸준함", "작심삼일", "하루 한 걸음이면 충분해!"],
+  ["안정", "혼자 참기", "어디에 있든 네 마음을 잘 챙겨!"],
+  ["자유", "남의 시선", "네가 원하는 곳으로 달려가 봐!"],
+] as const;
+
+const ITEMS = ["네잎클로버", "빨간 양말", "작은 수첩", "복주머니", "행운의 열쇠고리", "따뜻한 머그컵", "노란 연필", "양 인형", "분홍 리본", "동전 지갑", "붕어빵", "손편지", "작은 거울", "꽃 스티커", "귀여운 우산", "초록 머리핀", "행운의 돌", "포잎이 키링", "책갈피", "별 모양 사탕"];
+
+const EXTRA_LINES: Record<string, Record<3 | 4 | 5, string[]>> = {
+  love: { 3: ["서로의 시간을 존중해 보세요.", "편안한 관계에 집중해 보세요."], 4: ["뜻밖의 공통점이 마음을 열어요.", "작은 약속이 큰 신뢰가 돼요."], 5: ["설레는 만남이 기다리고 있어요.", "솔직한 마음이 좋은 답을 받아요."] },
+  work: { 3: ["계획을 작게 나누면 편해져요.", "쉬어가는 시간도 중요해요."], 4: ["새로운 습관이 성과를 만들어요.", "정리해둔 노트가 도움이 돼요."], 5: ["기대하지 않은 기회가 찾아와요.", "도전한 일이 좋은 결실을 맺어요."] },
+  money: { 3: ["필요한 것부터 차근차근 사세요.", "작은 예산표가 든든한 친구예요."], 4: ["알뜰한 습관이 복을 불러요.", "쓸 곳과 아낄 곳이 선명해져요."], 5: ["기다리던 좋은 소식이 들려와요.", "노력한 만큼 든든해지는 해예요."] },
+  health: { 3: ["나만의 휴식 시간을 챙기세요.", "바쁜 날도 한숨 돌려요."], 4: ["가벼운 산책이 기분을 밝혀요.", "균형 잡힌 하루가 힘이 돼요."], 5: ["활기찬 일상이 찾아올 거예요.", "좋은 습관이 복을 더해줘요."] },
+};
+
 const FOODS = ["떡국", "만두", "잡채", "동그랑땡", "갈비찜", "약과", "식혜", "수정과", "곶감", "인절미", "귤", "딸기", "김밥", "짜장면", "치킨", "바나나우유"];
 
 const COLORS = [
@@ -116,14 +151,25 @@ export function drawFortune(name: string, date = today()): Fortune {
   const pick = <T,>(list: T[]) => list[Math.floor(rand() * list.length)];
 
   // stars are 3-5 so nobody gets a sad new year
+  const golden = rand() < 0.03; // one in about 33, deterministic for the day
   const areas = AREAS.map((a) => {
-    const stars = (3 + Math.floor(rand() * 3)) as 3 | 4 | 5;
-    return { key: a.key, label: a.label, stars, line: pick(a.lines[stars]) };
+    const stars = (golden ? 5 : 3 + Math.floor(rand() * 3)) as 3 | 4 | 5;
+    return { key: a.key, label: a.label, stars, line: pick([...a.lines[stars], ...EXTRA_LINES[a.key][stars]]) };
   });
   const avg = areas.reduce((sum, a) => sum + a.stars, 0) / areas.length;
   const stamp = avg >= 4.5 ? "大吉" : avg >= 4 ? "吉" : avg >= 3.5 ? "中吉" : "小吉";
 
-  return { name: name.trim(), date, stamp, total: pick(TOTAL), areas, food: pick(FOODS), color: pick(COLORS) };
+  const themeIndex = Math.floor(rand() * TOTAL.length);
+  const [keyword, caution, cheer] = THEMES[themeIndex];
+  const grade = stamp === "大吉" ? "대길" : stamp === "吉" ? "길" : stamp === "中吉" ? "중길" : "소길";
+  return {
+    name: name.trim(), date, stamp: golden ? "福" : stamp,
+    grade: golden ? "황금대길" : grade, golden,
+    total: golden ? ["황금빛 복이 가득한 한 해.", "바라는 일이 하나씩 이루어져요."] : TOTAL[themeIndex],
+    keyword: golden ? "특별한 행운" : keyword,
+    caution, cheer: golden ? "와아! 황금 복주머니야! 올해도 반짝반짝 빛나자!" : cheer,
+    areas, food: pick(FOODS), color: pick(COLORS), item: pick(ITEMS),
+  };
 }
 
 // 설날 2027 = Feb 6
