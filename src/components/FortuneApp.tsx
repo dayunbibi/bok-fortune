@@ -97,7 +97,7 @@ export default function FortuneApp() {
   async function sendToFriend() {
     if (!fortune) return;
     const url = window.location.origin;
-    const text = `2027 복주머니 운세 🧧 나는 ${fortune.stamp} 나왔어! 너도 흔들어봐`;
+    const text = `2027 복주머니 운세 🧧 나는 ${fortune.golden ? "희귀 황금 복주머니" : fortune.grade} 나왔어! 올해의 키워드는 ${fortune.keyword}. 너도 흔들어봐`;
     if (navigator.share) {
       try {
         await navigator.share({ title: "2027 복주머니 운세", text, url });
@@ -307,9 +307,9 @@ function Stars({ n }: { n: number }) {
 }
 
 // the wooden roller at the top and bottom of the scroll
-function Roller({ className = "" }: { className?: string }) {
+function Roller({ className = "", golden = false }: { className?: string; golden?: boolean }) {
   return (
-    <div className={`relative z-10 -mx-1.5 flex h-6 items-center justify-between rounded-[14px] border-[2.5px] border-ink bg-red-deep ${className}`}>
+    <div className={`relative z-10 -mx-1.5 flex h-6 items-center justify-between rounded-[14px] border-[2.5px] border-ink ${golden ? "bg-gold" : "bg-red-deep"} ${className}`}>
       <div className="-ml-3 size-5 rounded-full border-[2.5px] border-ink bg-gold" />
       <div className="-mr-3 size-5 rounded-full border-[2.5px] border-ink bg-gold" />
     </div>
@@ -325,16 +325,18 @@ function ResultScreen({ f, onSave, onSend, onOther }: { f: Fortune; onSave: () =
       </div>
 
       <div className="relative mx-[18px] mt-[18px] animate-unroll">
-        <Roller />
-        <div className="mx-1.5 -mt-1.5 flex flex-col border-x-[2.5px] border-ink bg-paper">
-          <div className="saekdong mt-1.5 h-[15px]" />
+        <Roller golden={f.golden} />
+        <div className={`mx-1.5 -mt-1.5 flex flex-col border-x-[2.5px] border-ink ${f.golden ? "bg-[#FFF0B7]" : "bg-paper"}`}>
+          <div className={`mt-1.5 h-[15px] ${f.golden ? "bg-gold" : "saekdong"}`} />
+          {f.golden && <div className="mx-4 mt-4 rounded-xl border-2 border-ink bg-gold py-2 text-center font-jua text-[19px]">✦ 희귀 황금 복주머니 ✦</div>}
           <div className="relative flex flex-col items-center gap-2.5 px-5 pt-5 pb-4">
             <div
               className={`absolute top-3 right-3.5 flex size-10 -rotate-[8deg] items-center justify-center rounded-[7px] border-2 border-ink bg-red font-batang font-bold text-on-red ${f.stamp.length > 1 ? "text-[15px]" : "text-[24px]"}`}
             >
               {f.stamp}
             </div>
-            <div className="rounded-full bg-ink px-3 py-[3px] font-jua text-[14px] text-on-red">올해의 총운</div>
+            <div className="rounded-full bg-ink px-3 py-[3px] font-jua text-[14px] text-on-red">{f.grade} · 올해의 총운</div>
+            <div className="font-jua text-[17px] text-red-title">올해의 키워드 · {f.keyword}</div>
             <p className="px-[18px] text-center font-batang text-[21px] leading-normal font-bold text-balance">
               {f.total[0]}
               <br />
@@ -351,7 +353,7 @@ function ResultScreen({ f, onSave, onSend, onOther }: { f: Fortune; onSave: () =
               </div>
             ))}
           </div>
-          <div className="grid grid-cols-2 gap-2.5 px-4 pb-5">
+          <div className="grid grid-cols-2 gap-2.5 px-4 pb-3">
             <div className="flex flex-col gap-0.5 rounded-[14px] border-2 border-ink bg-field px-3 py-2.5">
               <div className="text-[12px] text-faint">행운의 음식</div>
               <div className="font-jua text-[20px] text-red-title">{f.food}</div>
@@ -364,9 +366,21 @@ function ResultScreen({ f, onSave, onSend, onOther }: { f: Fortune; onSave: () =
               </div>
             </div>
           </div>
+          <div className="mx-4 mb-3 rounded-[14px] border-2 border-ink bg-field px-3 py-2.5">
+            <div className="text-[12px] text-faint">행운의 아이템</div>
+            <div className="font-jua text-[20px] text-red-title">{f.item}</div>
+          </div>
+          <div className="mx-4 mb-3 rounded-[14px] border border-dash bg-tile px-3 py-2.5">
+            <div className="font-jua text-[15px]">올해 조심할 것</div>
+            <p className="text-[14px] text-ink-soft">{f.caution}</p>
+          </div>
+          <div className="mx-4 mb-4 flex items-center gap-2 rounded-[14px] border-2 border-ink bg-field p-3">
+            <img src="/art/poip-hanbok.webp" alt="" className={`w-14 shrink-0 ${f.golden ? "rotate-[12deg]" : "-rotate-[8deg]"}`} />
+            <div><div className="font-jua text-[17px] text-red-title">포잎이의 한마디</div><p className="text-[14px] leading-snug">{f.cheer}</p></div>
+          </div>
           <p className="pb-3 text-center text-[11px] text-muted">향수병 게임즈 · bok-fortune.vercel.app</p>
         </div>
-        <Roller className="-mt-1" />
+        <Roller className="-mt-1" golden={f.golden} />
         <img src="/art/poip-hanbok.webp" alt="" className="absolute -top-[74px] -right-3.5 w-[84px] rotate-[10deg]" />
       </div>
 
