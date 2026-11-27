@@ -155,23 +155,23 @@ function StartScreen({
   dday: number | null;
 }) {
   return (
-    <section className="flex flex-1 flex-col pb-[calc(28px+env(safe-area-inset-bottom))]">
-      <div className="flex items-center justify-between px-6 pt-[18px] text-[13px] text-muted">
+    <section className="flex flex-1 flex-col pb-[calc(20px+env(safe-area-inset-bottom))]">
+      <div className="flex items-center justify-between px-6 pt-3 text-[13px] text-muted">
         <a href="https://homesick-games.vercel.app" className="hover:text-red-title">
           향수병 게임즈
         </a>
         {dday !== null && dday >= 0 && <span>{dday === 0 ? "오늘은 설날!" : `설날까지 D-${dday}`}</span>}
       </div>
 
-      <div className="flex flex-col items-center gap-0.5 pt-[22px]">
+      <div className="flex flex-col items-center gap-0.5 pt-3.5">
         <div className="rounded-full border-[1.5px] border-gold-star bg-paper px-3 py-1 text-[13px] text-red-deep">
           정미년 · 붉은 양의 해
         </div>
-        <div className="mt-2.5 font-jua text-[30px] leading-none text-gold-text">2027</div>
-        <h1 className="font-jua text-[48px] leading-[1.1] text-red-title [text-shadow:0_3px_0_#2B2320]">복주머니 운세</h1>
+        <div className="mt-2 font-jua text-[28px] leading-none text-gold-text">2027</div>
+        <h1 className="font-jua text-[44px] leading-[1.1] text-red-title [text-shadow:0_3px_0_#2B2320]">복주머니 운세</h1>
       </div>
 
-      <div className="relative mt-1.5 aspect-[390/330] w-full">
+      <div className="relative mx-auto mt-1 aspect-[390/330] w-full max-w-[320px]">
         <div className="absolute aspect-square rounded-full bg-sun" style={{ left: px(60), top: px(24, 330), width: px(270) }} />
         <img src="/art/poip-hanbok.webp" alt="한복 입은 포잎이" className="absolute" style={{ left: px(84), top: px(4, 330), width: px(216) }} />
         <img
@@ -184,7 +184,7 @@ function StartScreen({
       </div>
 
       <form
-        className="flex flex-col gap-3 px-7 pt-3.5"
+        className="flex flex-col gap-2.5 px-7 pt-2"
         onSubmit={(e) => {
           e.preventDefault();
           onShake();
@@ -202,7 +202,7 @@ function StartScreen({
           autoComplete="off"
           className="h-14 rounded-2xl border-[2.5px] border-ink bg-field px-[18px] text-[18px] outline-none focus:border-red"
         />
-        <button type="submit" className="btn mt-1.5 h-[62px] rounded-[18px] bg-red text-[23px] text-on-red">
+        <button type="submit" className="btn mt-1 h-[58px] rounded-[18px] bg-red text-[23px] text-on-red">
           {drewToday ? "오늘의 복 다시 보기" : "복주머니 흔들기"}
         </button>
         <p className="text-center text-[13px] text-faint">하루에 한 번, 새 복이 담겨요</p>
@@ -324,7 +324,7 @@ function ResultScreen({ f, onSave, onSend, onOther }: { f: Fortune; onSave: () =
         <h1 className="font-jua text-[28px] leading-tight">{f.name}님의 새해 운세</h1>
       </div>
 
-      <div className="relative mx-[18px] mt-[18px] animate-rise">
+      <div className="relative mx-[18px] mt-[18px] animate-unroll">
         <Roller />
         <div className="mx-1.5 -mt-1.5 flex flex-col border-x-[2.5px] border-ink bg-paper">
           <div className="saekdong mt-1.5 h-[15px]" />
@@ -364,6 +364,7 @@ function ResultScreen({ f, onSave, onSend, onOther }: { f: Fortune; onSave: () =
               </div>
             </div>
           </div>
+          <p className="pb-3 text-center text-[11px] text-muted">향수병 게임즈 · bok-fortune.vercel.app</p>
         </div>
         <Roller className="-mt-1" />
         <img src="/art/poip-hanbok.webp" alt="" className="absolute -top-[74px] -right-3.5 w-[84px] rotate-[10deg]" />
