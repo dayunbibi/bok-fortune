@@ -71,134 +71,95 @@ export function stamp(c: CanvasRenderingContext2D, text: string, cx: number, cy:
 }
 
 export async function makeCardImage(f: Fortune): Promise<Blob> {
-  const allText = `${f.name}님의 2027 ${f.total.join(" ")} ${f.areas.map((a) => a.label + a.line).join(" ")} 행운의 음식 색 ${f.food} ${f.color.name} 복주머니 운세 정미년 붉은 양의 해 향수병 게임즈 나도 흔들러 가기 →`;
+  const allText = [f.name, f.grade, f.keyword, ...f.total, ...f.areas.map(a => a.label + a.line), f.food, f.color.name, f.item, f.caution, f.cheer, "복주머니 운세 향수병 게임즈 행운의 아이템 포잎이의 한마디 황금 복주머니"].join(" ");
   await Promise.all([
     document.fonts.load(`40px ${JUA}`, allText),
     document.fonts.load(`700 50px ${BATANG}`, f.total.join("") + f.stamp),
     document.fonts.load(`27px ${DODUM}`, allText + "★"),
   ]).catch(() => {});
   const [cat, lamb] = await Promise.all([loadImage("/art/poip-hanbok.webp"), loadImage("/art/baby-lamb.webp")]);
-
   const canvas = document.createElement("canvas");
-  canvas.width = W;
-  canvas.height = H;
+  canvas.width = W; canvas.height = H;
   const c = canvas.getContext("2d")!;
   c.textBaseline = "alphabetic";
 
-  // red background with the 색동 stripe on top
-  c.fillStyle = "#D8402F";
+  const accent = f.golden ? "#F2C14E" : "#D8402F";
+  const headerInk = f.golden ? INK : "#FFF6E2";
+  c.fillStyle = accent;
   c.fillRect(0, 0, W, H);
   STRIPES.forEach((color, i) => {
     c.fillStyle = color;
     c.fillRect(0, i * 6, W, 6);
   });
-  c.fillStyle = INK;
-  c.fillRect(0, 30, W, 4);
+  c.fillStyle = INK; c.fillRect(0, 30, W, 4);
 
-  c.font = `34px ${JUA}`;
-  c.fillStyle = "#FFE7A8";
-  c.fillText("2027 정미년 · 붉은 양의 해", 64, 118);
-  c.font = `28px ${DODUM}`;
-  c.fillStyle = "#FFF6E2";
-  c.textAlign = "right";
-  c.fillText("향수병 게임즈", W - 64, 116);
-  c.textAlign = "left";
+  c.font = `32px ${JUA}`; c.fillStyle = headerInk;
+  c.fillText("2027 정미년 · 붉은 양의 해", 64, 83);
+  c.textAlign = "right"; c.font = `28px ${DODUM}`;
+  c.fillText("향수병 게임즈", W - 64, 83); c.textAlign = "left";
+  c.font = `95px ${JUA}`; c.fillStyle = INK;
+  c.fillText(f.golden ? "황금 복주머니" : "복주머니 운세", 64, 183 + 5, 952);
+  c.fillStyle = f.golden ? "#FFF3B3" : "#FFF6E2";
+  c.fillText(f.golden ? "황금 복주머니" : "복주머니 운세", 64, 183, 952);
 
-  // big title with the sticker shadow
-  c.font = `116px ${JUA}`;
-  c.fillStyle = INK;
-  c.fillText("복주머니 운세", 64, 252 + 7);
-  c.fillStyle = "#FFF6E2";
-  c.fillText("복주머니 운세", 64, 252);
+  const x = 64, w = 952, pad = 36, inner = w - pad * 2;
+  const left = x + pad;
+  box(c, x, 217, w, 964, 32, f.golden ? "#FFF0B7" : "#FFF8E8", 5);
+  stamp(c, f.stamp, x + w - 66, 280, 72);
+  c.font = `42px ${JUA}`; c.fillStyle = "#C8352A";
+  c.fillText(`${f.name}님의 새해 운세`, left, 282, inner - 100);
+  c.font = `34px ${JUA}`; c.fillStyle = INK;
+  c.fillText(`${f.grade} · 올해의 키워드: ${f.keyword}`, left, 341, inner);
+  c.font = `700 43px ${BATANG}`;
+  f.total.forEach((line, i) => c.fillText(line, left, 406 + i * 59, inner));
+  c.strokeStyle = "#D9C8A8"; c.lineWidth = 3; c.setLineDash([8, 9]);
+  c.beginPath(); c.moveTo(left, 486); c.lineTo(left + inner, 486); c.stroke(); c.setLineDash([]);
 
-  // the paper card, height depends on how long the lines are
-  const x = 64;
-  const w = W - 128;
-  const pad = 48;
-  const inner = w - pad * 2;
-  const top = 300;
-
-  c.font = `700 50px ${BATANG}`;
-  const totalLines = f.total.flatMap((t) => wrap(c, t, inner - 40));
-  c.font = `27px ${DODUM}`;
   const cellW = (inner - 18) / 2;
-  const cellLines = f.areas.map((a) => wrap(c, a.line, cellW - 56).slice(0, 2));
-  const rowH = [0, 1].map((r) => 24 + 46 + Math.max(cellLines[r * 2].length, cellLines[r * 2 + 1].length) * 38 + 22);
-
-  const nameY = top + 44 + 40;
-  const totalY = nameY + 36 + 50;
-  const gridY = totalY + (totalLines.length - 1) * 70 + 46;
-  const pillY = gridY + rowH[0] + 18 + rowH[1] + 28;
-  const cardH = pillY + 66 + 44 - top;
-
-  box(c, x, top, w, cardH, 32, "#FFF8E8", 5);
-  stamp(c, f.stamp, x + w - 40 - 46, top + 36 + 46, 92);
-
-  c.font = `42px ${JUA}`;
-  c.fillStyle = "#C8352A";
-  c.fillText(`${f.name}님의 2027`, x + pad, nameY);
-
-  c.font = `700 50px ${BATANG}`;
-  c.fillStyle = INK;
-  totalLines.forEach((line, i) => c.fillText(line, x + pad, totalY + i * 70));
-
   f.areas.forEach((a, i) => {
-    const col = i % 2;
-    const row = Math.floor(i / 2);
-    const cx = x + pad + col * (cellW + 18);
-    const cy = gridY + (row ? rowH[0] + 18 : 0);
-    box(c, cx, cy, cellW, rowH[row], 22, "#FBEFD6");
-    c.font = `38px ${JUA}`;
-    c.fillStyle = INK;
-    c.fillText(a.label, cx + 28, cy + 24 + 36);
-    stars(c, a.stars, cx + cellW - 28, cy + 24 + 34, 32);
-    c.font = `27px ${DODUM}`;
-    c.fillStyle = "#4A3F36";
-    cellLines[i].forEach((line, j) => c.fillText(line, cx + 28, cy + 24 + 46 + 30 + j * 38));
+    const cx = left + (i % 2) * (cellW + 18);
+    const cy = 506 + Math.floor(i / 2) * 149;
+    box(c, cx, cy, cellW, 134, 20, f.golden ? "#FFE39A" : "#FBEFD6");
+    c.font = `34px ${JUA}`; c.fillStyle = INK;
+    c.fillText(a.label, cx + 22, cy + 42);
+    stars(c, a.stars, cx + cellW - 22, cy + 41, 28);
+    c.font = `26px ${DODUM}`; c.fillStyle = "#4A3F36";
+    wrap(c, a.line, cellW - 44).slice(0, 2).forEach((line,j) => c.fillText(line,cx+22,cy+80+j*32,cellW-44));
+  });
+  const luckW = (inner - 24) / 3;
+  const lucks = [{label:"행운의 음식",value:f.food},{label:"행운의 색",value:f.color.name},{label:"행운의 아이템",value:f.item}];
+  lucks.forEach((luck,i) => {
+    const lx = left + i * (luckW + 12);
+    box(c,lx,811,luckW,100,18,"#FFFDF7",3);
+    c.font = `25px ${DODUM}`; c.fillStyle = "#6B5D4F";
+    c.fillText(luck.label,lx+16,846,luckW-32);
+    c.font = `34px ${JUA}`; c.fillStyle = "#C8352A";
+    let offset = 16;
+    if(i===1) {
+      c.beginPath(); c.arc(lx+32,881,13,0,Math.PI*2); c.fillStyle=f.color.hex; c.fill();
+      c.strokeStyle=INK; c.lineWidth=3; c.stroke(); c.fillStyle=INK; offset=49;
+    }
+    c.fillText(luck.value,lx+offset,891,luckW-offset-15);
   });
 
-  // lucky food + color pills
-  c.font = `28px ${DODUM}`;
-  const foodLabelW = c.measureText("행운의 음식").width;
-  const colorLabelW = c.measureText("행운의 색").width;
-  c.font = `32px ${JUA}`;
-  const foodW = 26 + foodLabelW + 12 + c.measureText(f.food).width + 26;
-  const colorW = 26 + colorLabelW + 12 + 30 + 12 + c.measureText(f.color.name).width + 26;
-  const px = x + pad;
-  box(c, px, pillY, foodW, 66, 33, "#FFFDF7", 3);
-  box(c, px + foodW + 18, pillY, colorW, 66, 33, "#FFFDF7", 3);
-  c.font = `28px ${DODUM}`;
-  c.fillStyle = INK;
-  c.fillText("행운의 음식", px + 26, pillY + 43);
-  c.fillText("행운의 색", px + foodW + 18 + 26, pillY + 43);
-  c.font = `32px ${JUA}`;
-  c.fillStyle = "#C8352A";
-  c.fillText(f.food, px + 26 + foodLabelW + 12, pillY + 45);
-  const dotX = px + foodW + 18 + 26 + colorLabelW + 12;
-  c.beginPath();
-  c.arc(dotX + 15, pillY + 33, 15, 0, Math.PI * 2);
-  c.fillStyle = f.color.hex;
-  c.fill();
-  c.lineWidth = 3;
-  c.strokeStyle = INK;
-  c.stroke();
-  c.fillStyle = INK;
-  c.fillText(f.color.name, dotX + 42, pillY + 45);
+  box(c,left,925,inner,77,17,f.golden ? "#FFE39A" : "#FBEFD6");
+  c.font = `29px ${JUA}`; c.fillStyle = INK;
+  c.fillText("올해 조심할 것",left+22,973);
+  c.font = `30px ${DODUM}`;
+  c.fillText(f.caution,left+250,973,inner-272);
 
-  // footer
-  c.font = `36px ${JUA}`;
-  c.fillStyle = "#FFF6E2";
-  c.fillText("나도 복주머니 흔들러 가기 →", 64, H - 76);
-  c.font = `25px ${DODUM}`;
-  c.fillText("bok-fortune.vercel.app", 64, H - 37);
-  const lambH = (150 * lamb.height) / lamb.width;
-  c.drawImage(lamb, W - 250 - 150, H - 24 - lambH, 150, lambH);
-  c.save();
-  c.translate(W - 30 - 120, H + 30 - 144);
-  c.rotate((-6 * Math.PI) / 180);
-  const catH = (240 * cat.height) / cat.width;
-  c.drawImage(cat, -120, 144 - catH, 240, catH);
-  c.restore();
+  box(c,left,1015,inner,130,20,"#FFFDF7",3);
+  const catW = 100, catH = catW * cat.height / cat.width;
+  c.drawImage(cat,left+16,1015+(130-catH)/2,catW,catH);
+  c.font = `30px ${JUA}`; c.fillStyle = "#C8352A";
+  c.fillText("포잎이의 한마디",left+136,1057);
+  c.font = `29px ${DODUM}`; c.fillStyle = INK;
+  wrap(c,f.cheer,inner-158).slice(0,2).forEach((line,i)=>c.fillText(line,left+136,1093+i*34,inner-158));
 
-  return new Promise((resolve, reject) => canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("toBlob failed"))), "image/png"));
+  c.fillStyle = headerInk; c.font = `35px ${JUA}`;
+  c.fillText("나도 복주머니 흔들러 가기 →",64,1255);
+  c.font = `26px ${DODUM}`; c.fillText("bok-fortune.vercel.app",64,1300);
+  const lambW=116, lambH=lambW*lamb.height/lamb.width;
+  c.drawImage(lamb,W-64-lambW,H-24-lambH,lambW,lambH);
+  return new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error("toBlob failed")),"image/png"));
 }
