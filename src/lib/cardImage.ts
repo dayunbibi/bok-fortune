@@ -188,7 +188,9 @@ export async function makeCardImage(f: Fortune): Promise<Blob> {
   // footer
   c.font = `36px ${JUA}`;
   c.fillStyle = "#FFF6E2";
-  c.fillText("나도 복주머니 흔들러 가기 →", 64, H - 60);
+  c.fillText("나도 복주머니 흔들러 가기 →", 64, H - 76);
+  c.font = `25px ${DODUM}`;
+  c.fillText("bok-fortune.vercel.app", 64, H - 37);
   const lambH = (150 * lamb.height) / lamb.width;
   c.drawImage(lamb, W - 250 - 150, H - 24 - lambH, 150, lambH);
   c.save();
