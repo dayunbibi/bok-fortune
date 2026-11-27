@@ -319,9 +319,9 @@ function Roller({ className = "", golden = false }: { className?: string; golden
 function ResultScreen({ f, onSave, onSend, onOther }: { f: Fortune; onSave: () => void; onSend: () => void; onOther: () => void }) {
   return (
     <section className="flex flex-1 flex-col pb-[calc(28px+env(safe-area-inset-bottom))]">
-      <div className="flex flex-col items-center gap-1 px-6 pt-[26px] text-center">
+      <div className="flex flex-col items-center gap-1 px-[90px] pt-[26px] text-center">
         <div className="text-[13px] text-red-deep">2027 정미년 · 붉은 양의 해</div>
-        <h1 className="font-jua text-[28px] leading-tight">{f.name}님의 새해 운세</h1>
+        <h1 className={`font-jua leading-tight text-balance [overflow-wrap:anywhere] ${f.name.length > 3 ? "text-[23px]" : "text-[28px]"}`}>{f.name}님의 새해 운세</h1>
       </div>
 
       <div className="relative mx-[18px] mt-[18px] animate-unroll">
@@ -353,25 +353,25 @@ function ResultScreen({ f, onSave, onSend, onOther }: { f: Fortune; onSave: () =
               </div>
             ))}
           </div>
-          <div className="grid grid-cols-2 gap-2.5 px-4 pb-3">
-            <div className="flex flex-col gap-0.5 rounded-[14px] border-2 border-ink bg-field px-3 py-2.5">
-              <div className="text-[12px] text-faint">행운의 음식</div>
-              <div className="font-jua text-[20px] text-red-title">{f.food}</div>
+          <div className="grid grid-cols-3 gap-2 px-4 pb-3">
+            <div className="flex flex-col gap-0.5 rounded-[14px] border-2 border-ink bg-field px-2.5 py-2">
+              <div className="text-[11px] text-faint">행운의 음식</div>
+              <div className="font-jua text-[17px] leading-tight text-red-title">{f.food}</div>
             </div>
-            <div className="flex items-center gap-2.5 rounded-[14px] border-2 border-ink bg-field px-3 py-2.5">
-              <div className="size-[30px] shrink-0 rounded-full border-2 border-ink" style={{ background: f.color.hex }} />
-              <div className="flex flex-col gap-0.5">
-                <div className="text-[12px] text-faint">행운의 색</div>
-                <div className="font-jua text-[20px]">{f.color.name}</div>
+            <div className="flex flex-col gap-0.5 rounded-[14px] border-2 border-ink bg-field px-2.5 py-2">
+              <div className="text-[11px] text-faint">행운의 색</div>
+              <div className="flex items-center gap-1.5 font-jua text-[17px] leading-tight">
+                <span className="size-4 shrink-0 rounded-full border-2 border-ink" style={{ background: f.color.hex }} />
+                {f.color.name}
               </div>
             </div>
+            <div className="flex flex-col gap-0.5 rounded-[14px] border-2 border-ink bg-field px-2.5 py-2">
+              <div className="text-[11px] text-faint">행운의 아이템</div>
+              <div className="font-jua text-[17px] leading-tight text-red-title">{f.item}</div>
+            </div>
           </div>
-          <div className="mx-4 mb-3 rounded-[14px] border-2 border-ink bg-field px-3 py-2.5">
-            <div className="text-[12px] text-faint">행운의 아이템</div>
-            <div className="font-jua text-[20px] text-red-title">{f.item}</div>
-          </div>
-          <div className="mx-4 mb-3 rounded-[14px] border border-dash bg-tile px-3 py-2.5">
-            <div className="font-jua text-[15px]">올해 조심할 것</div>
+          <div className="mx-4 mb-3 flex items-baseline gap-2 rounded-[14px] border border-dash bg-tile px-3 py-2.5">
+            <div className="shrink-0 font-jua text-[15px]">올해 조심할 것</div>
             <p className="text-[14px] text-ink-soft">{f.caution}</p>
           </div>
           <div className="mx-4 mb-4 flex items-center gap-2 rounded-[14px] border-2 border-ink bg-field p-3">

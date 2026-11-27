@@ -99,7 +99,7 @@ export async function makeCardImage(f: Fortune): Promise<Blob> {
   c.fillText("향수병 게임즈", W - 64, 83); c.textAlign = "left";
   c.font = `95px ${JUA}`; c.fillStyle = INK;
   c.fillText(f.golden ? "황금 복주머니" : "복주머니 운세", 64, 183 + 5, 952);
-  c.fillStyle = f.golden ? "#FFF3B3" : "#FFF6E2";
+  c.fillStyle = "#FFFDF7";
   c.fillText(f.golden ? "황금 복주머니" : "복주머니 운세", 64, 183, 952);
 
   const x = 64, w = 952, pad = 36, inner = w - pad * 2;
@@ -136,8 +136,8 @@ export async function makeCardImage(f: Fortune): Promise<Blob> {
     c.font = `34px ${JUA}`; c.fillStyle = "#C8352A";
     let offset = 16;
     if(i===1) {
-      c.beginPath(); c.arc(lx+32,881,13,0,Math.PI*2); c.fillStyle=f.color.hex; c.fill();
-      c.strokeStyle=INK; c.lineWidth=3; c.stroke(); c.fillStyle=INK; offset=49;
+      c.beginPath(); c.arc(lx+30,880,12,0,Math.PI*2); c.fillStyle=f.color.hex; c.fill();
+      c.strokeStyle=INK; c.lineWidth=3; c.stroke(); c.fillStyle=INK; offset=56;
     }
     c.fillText(luck.value,lx+offset,891,luckW-offset-15);
   });
